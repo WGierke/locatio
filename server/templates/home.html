@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Smart Transportation and Energy</title>
+
+    <!-- CSS  -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="css/materialize.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <nav class="primary-color" role="navigation">
+            <div class="nav-wrapper container">
+                <a id="logo-container" href="#" class="brand-logo">Kühne & Nagel Challenge</a>
+                <ul class="right hide-on-med-and-down">
+                </ul>
+                <ul id="nav-mobile" class="side-nav">
+                    <li><a href={{url_for("newRoute")}}>New Route</a></li>
+                </ul>
+                <a href="#" data-activates="nav-mobile" class="button-collapse"><i>
+                    class="material-icons accent-color-text">menu</i></a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <div id="index-banner" class="parallax-container">
+            <div class="section no-pad-bot">
+                <div class="container">
+                    <br />
+                    <br />
+                    <h1 class="header center white-text light">Smart Transportation Now</h1>
+                    <div class="row center">
+                        <h5 class="header col s12 m12 l12 light">How to improve shipment and transportation of goods all around the world.</h5>
+                    </div>
+                    <br />
+                    <br />
+                </div>
+            </div>
+            <div class="parallax primary-color">
+                <img src="images/K&N_Slider.jpg">
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="section">
+                <div class="row">
+                    <div class="col s12 m4 l4" style="margin-top: 20px; margin-bottom: 20px;">
+                        <div class="icon-block">
+                            <h2 class="center primary-color-text">
+                                <i class="material-icons">&#xE531;</i>
+                            </h2>
+                            <div class="row center">
+                                <a href='{{url_for("newRoute")}}' class="waves-effect waves-light primary-color">New Route</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col s12 m4 l4" style="margin-top: 20px; margin-bottom: 20px;">
+                        <div class="icon-block">
+                            <h2 class="center primary-color-text">
+                                <i class="material-icons">&#xE55F;</i>
+                            </h2>
+
+                            <div class="row center">
+                                <a href='{{url_for("overview")}}' class="waves-effect waves-light primary-color">Shipment Overview</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col s12 m4 l4" style="margin-top: 20px; margin-bottom: 20px;">
+                        <div class="icon-block">
+                            <h2 class="center primary-color-text">
+                                <i class="material-icons">&#xE8B8;</i>
+                            </h2>
+
+                            <div class="row center">
+                                <a href="#" class="btn-large waves-effect waves-light primary-color">Settings</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="page-footer primary-color">
+        <div class="container">
+            <div class="row">
+                <div class="col s12 m12 l6">
+                    <h5 class="white-text">About the Kühne and Nagel Challenge</h5>
+                    <p class="grey-text text-lighten-4">This project is being developed for the Smart Transportation & Energy Hackathon at the Rainmaking Loft in Berlin.</p>
+                </div>
+                <div class="col s12 m12 l3">
+                    <h5 class="white-text">Links</h5>
+                    <ul>
+                        <li><a class="white-text" href="https://github.com/WGierke/smart_transportation_and_energy">Git</a></li>
+                        <li><a class="white-text" href="http://de.kuehne-nagel.com/de_de/">K&N Homepage</a></li>
+                    </ul>
+                </div>
+                <div class="col s12 m12 l3">
+                    <h5 class="white-text">Contact</h5>
+                    <ul>
+                        <li><a class="white-text" href="mailto:robert.stark@student.hpi.de">E-Mail</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="footer-copyright">
+            <div class="container">
+                Developed by
+                <a class="primary-color-light-text" href="mailto:ajay.kesar@student.hpi.de">Ajay</a>,
+                <a class="primary-color-light-text" href="mailto:aron.kunze@student.hpi.de">Aron</a>,
+                <a class="primary-color-light-text" href="mailto:robert.stark@student.hpi.de">Robert</a> and
+                <a class="primary-color-light-text" href="mailto:willi.gierke@student.hpi.de">Willi</a>.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/jquery-2.1.1.min.js"></script>
+    <script src="js/materialize.js"></script>
+    <script src="js/init.js"></script>
+</body>
+</html>

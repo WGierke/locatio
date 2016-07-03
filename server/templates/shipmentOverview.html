@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Smart Transportation and Energy</title>
+
+    <!-- CSS  -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="../css/materialize.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" type="text/css"
+          href="https://js.api.here.com/v3/3.0/mapsjs-ui.css"/>
+    <script type="text/javascript" charset="UTF-8"
+            src="https://js.api.here.com/v3/3.0/mapsjs-core.js"></script>
+    <script type="text/javascript" charset="UTF-8"
+            src="https://js.api.here.com/v3/3.0/mapsjs-service.js"></script>
+    <script type="text/javascript" charset="UTF-8"
+            src="https://js.api.here.com/v3/3.0/mapsjs-ui.js"></script>
+    <script type="text/javascript" charset="UTF-8"
+            src="https://js.api.here.com/v3/3.0/mapsjs-mapevents.js"></script>
+</head>
+<body>
+<header>
+    <nav class="primary-color" role="navigation">
+        <div class="nav-wrapper container">
+            <a href={{url_for("index")}} class="brand-logo">Kühne & Nagel
+                Challenge</a>
+            <a href={{url_for("index")}} class="brand-logo right">
+                <img id="navbar-Logo" src="../images/K&N_logo_small.jpg">
+            </a>
+            <ul class="right hide-on-med-and-down">
+            </ul>
+            <a href="#" data-activates="nav-mobile" class="button-collapse">
+                <i class="material-icons accent-color-text">menu</i>
+            </a>
+        </div>
+    </nav>
+</header>
+
+<main>
+    <div class="container">
+        <div class="section no-pad-bot">
+            <div class="row">
+                <div class="col s6 m6 l6">
+                    <h4>Pick Up</h4>
+                    <div class="input-field col s12 m12 l12">
+                        <input value="{{ shipment.pickup_name }}" id="selected-start-company" type="text"
+                               class="validate">
+                        <label class="active" for="selected-start-company">Company</label>
+                    </div>
+                    <div class="input-field col s12 m12 l12">
+                        <input value="{{ shipment.get_start_location().street }}" id="selected-start-street" type="text"
+                               class="validate">
+                        <label class="active" for="selected-start-street">Street</label>
+                    </div>
+                    <div class="input-field col s3 m3 l3">
+                        <input value="{{ shipment.get_start_location().postal_code }}" id="selected-start-zip"
+                               type="text" class="validate">
+                        <label class="active" for="selected-start-zip">Postal Code</label>
+                    </div>
+                    <div class="input-field col s9 m9 l9">
+                        <input value="{{ shipment.get_start_location().city }}" id="selected-start-place" type="text"
+                               class="validate">
+                        <label class="active" for="selected-start-place">City</label>
+                    </div>
+                </div>
+                <div class="col s6 m6 l6">
+                    <h4>Drop Off</h4>
+                    <div class="input-field col s12 m12 l12">
+                        <input value="{{ shipment.drop_off_name }}" id="selected-destination-company" type="text"
+                               class="validate">
+                        <label class="active" for="selected-destination-company">Company</label>
+                    </div>
+                    <div class="input-field col s12 m12 l12">
+                        <input value="{{ shipment.get_end_location().street }}" id="selected-destination-street"
+                               type="text"
+                               class="validate">
+                        <label class="active" for="selected-destination-street">Street</label>
+                    </div>
+                    <div class="input-field col s3 m3 l3">
+                        <input value="{{ shipment.get_end_location().postal_code }}" id="selected-destination-zip"
+                               type="text" class="validate">
+                        <label class="active" for="selected-destination-zip">Postal Code</label>
+                    </div>
+                    <div class="input-field col s9 m9 l9">
+                        <input value="{{ shipment.get_end_location().city }}" id="selected-destination-place"
+                               type="text" class="validate">
+                        <label class="active" for="selected-destination-place">Place</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s6 m6 l6">
+                    <h5>Shipment Consolidations</h5>
+                    <table class="highlight">
+                        <thead>
+                        <tr>
+                            <th data-field="selection">Add to Route</th>
+                            <th data-field="start-company">Pick Up Company</th>
+                            <th data-field="start">Pick Up Address</th>
+                            <th data-field="destination-company">Drop Off Company</th>
+                            <th data-field="destination">Drop Off Address</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for s in shipment.find_closest_shipments(max_distance=5000000) %}
+                        <tr>
+                            <td><p>
+                                <input type="checkbox" class="filled-in" id="filled-in-box{{s[1].id}}"/>
+                                <label for="filled-in-box{{s[1].id}}"></label>
+                            </p></td>
+                            <td>{{ s[1].pickup_name }}</td>
+                            <td>{{ s[1].get_start_location()}}</td>
+                            <td>{{ s[1].drop_off_name }}</td>
+                            <td>{{ s[1].get_end_location()}}</td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col s6 m6 l6">
+                    <div id="map" style="height:400px; width:100%; background: grey;"></div>
+                </div>
+            </div>
+        </div>
+
+        <h4>Route Information</h4>
+        <div class="row">
+            <div class="col s6">
+                <div class="col s3">
+                    <div class="center">
+                        <div><img class="img-icons-street" src="../images/street.png" alt="dollar sign"></div>
+                        <p class="light center">Minimal Street Width</p>
+                    </div>
+                </div>
+                <div class="col s3">
+                    <div class="center">
+                        <div><img class="img-icons-bridge" src="../images/bridge.png" alt="dollar sign"></div>
+                        <p class="light center">Maximal Weight on Bridges</p>
+                    </div>
+                </div>
+                <div class="col s3">
+                    <div class="center">
+                        <div><img class="img-icons-bridgeEntry" src="../images/bridgeHeight.png" alt="dollar sign">
+                        </div>
+                        <p class="light center">Maximal Bridge Height</p>
+                    </div>
+                </div>
+                <div class="col s3">
+                    <div class="center">
+                        <div><img class="img-icons-bridgeEntry" src="../images/bridgeWeight.png" alt="dollar sign">
+                        </div>
+                        <p class="light center">Maximal Bridge Weight</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col s6">
+                <div class="col s3">
+                    <div class="center">
+                        <div><img class="img-icons-streetCurve" src="../images/curve.png" alt="dollar sign"></div>
+                        <p class="light center">Maximal Street Curvature</p>
+                    </div>
+                </div>
+                <div class="col s3">
+                    <div class="center">
+                        <div><img class="img-icons" src="../images/dollar-symbol.png" alt="dollar sign"></div>
+                        <p class="light center">Toll Costs</p>
+                    </div>
+                </div>
+                <div class="col s3">
+                    <div class="center">
+                        <div><img class="img-icons-ramp" src="../images/ramp.png" alt="dollar sign"></div>
+                        <p class="light center">Loading Dock Availability at Start</p>
+                    </div>
+                </div>
+                <div class="col s3">
+                    <div class="center">
+                        <div><img class="img-icons-ramp" src="../images/ramp.png" alt="dollar sign"></div>
+                        <p class="light center">Loading Dock Availability at Destination</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col s6">
+                <div class="col s3">
+                    <div class="center">
+                        <p class="route-info-values">10 m</p>
+                    </div>
+                </div>
+                <div class="col s3">
+                    <div class="center">
+                        <p class="route-info-values">30 tons</p>
+                    </div>
+                </div>
+                <div class="col s3">
+                    <div class="center">
+                        <p class="route-info-values">9.6 m</p>
+                    </div>
+                </div>
+                <div class="col s3">
+                    <div class="center">
+                        <p class="route-info-values">8.2 m</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col s6">
+                <div class="col s3">
+                    <div class="center">
+                        <p class="route-info-values">1 %</p>
+                    </div>
+                </div>
+                <div class="col s3">
+                    <div class="center">
+                        <p class="route-info-values">59 €</p>
+                    </div>
+                </div>
+                <div class="col s3">
+                    <div class="center">
+                        <p class="route-info-values">Yes</p>
+                    </div>
+                </div>
+                <div class="col s3">
+                    <div class="center">
+                        <p class="route-info-values">Yes</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col s4">
+                <div class="center">
+                    <img src="../images/transporter_logo_small.png">
+                    <p class="bigger-font">Load area: 7,5 [m3]<br>
+	                    Payload: 1.000 [kg]<br>
+	                    Max roof load: 300 [kg]
+                    </p>
+                </div>
+            </div>
+
+            <div class="col s4">
+                <div class="center">
+                    <i class="material-icons img-icons-contact">phone</i>
+                    <p class="bigger-font">+ 41 (0)44 786 97 47</p>
+                </div>
+            </div>
+            <div class="col s4">
+                <div class="center">
+                    <i class="material-icons img-icons-contact">mail</i>
+                    <p><a class="bigger-font" style="color: inherit;" href="mailto:meyer@kuehne-nagel.com">Mail</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+</main>
+
+<footer class="page-footer primary-color">
+    <div class="container">
+        <div class="row">
+            <div class="col l6 s12">
+                <h5 class="white-text">About the Kühne and Nagel Challenge</h5>
+                <p class="grey-text text-lighten-4">This project is being developed for the Smart Transportation &
+                    Energy Hackathon at the Rainmaking Loft in Berlin.</p>
+            </div>
+            <div class="col l3 s12">
+                <h5 class="white-text">Links</h5>
+                <ul>
+                    <li><a class="white-text" href="https://github.com/WGierke/smart_transportation_and_energy">Git</a>
+                    </li>
+                    <li><a class="white-text" href="http://de.kuehne-nagel.com/de_de/">K & N Homepage</a></li>
+                </ul>
+            </div>
+            <div class="col l3 s12">
+                <h5 class="white-text">Contact</h5>
+                <ul>
+                    <li><a class="white-text" href="mailto:robert.stark@student.hpi.de">Mail</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="footer-copyright">
+        <div class="container">
+            Developed by
+            <a class="primary-color-light-text" href="mailto:ajay.kesar@student.hpi.de">Ajay</a>,
+            <a class="primary-color-light-text" href="mailto:aron.kunze@student.hpi.de">Aron</a>,
+            <a class="primary-color-light-text" href="mailto:robert.stark@student.hpi.de">Robert</a> and
+            <a class="primary-color-light-text" href="mailto:willi.gierke@student.hpi.de">Willi</a>.
+        </div>
+    </div>
+</footer>
+<script src="../js/jquery-2.1.1.min.js"></script>
+<script src="../js/materialize.js"></script>
+<script src="../js/init.js"></script>
+<script src="../js/shipmentController.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        var start = {
+            lat: '{{shipment.get_start_location().lat}}',
+            lng: '{{shipment.get_start_location().lng}}'
+        };
+        var end = {
+            lat: '{{shipment.get_end_location().lat}}',
+            lng: '{{shipment.get_end_location().lng}}'
+        };
+
+        var joined = new Array();
+        joined.push(start);
+        joined.push(end);
+        calculateRouteFromAtoB(joined);
+        addMarkersToMap(joined);
+
+        function addWaypoint(shipment_id) {
+            console.log("/shipment/" + shipment_id);
+            $.getJSON("/shipment/" + shipment_id, draw_new_waypoints);
+        }
+
+        function draw_new_waypoints(data) {
+            var joined = new Array();
+                    var start = {
+                lat: '{{shipment.get_start_location().lat}}',
+                lng: '{{shipment.get_start_location().lng}}'
+            };
+            var end = {
+                lat: '{{shipment.get_end_location().lat}}',
+                lng: '{{shipment.get_end_location().lng}}'
+            };
+            joined.push(start);
+            if (data){
+                joined.push({lat: data.lat, lng: data.lng})
+            }
+            joined.push(end);
+            calculateRouteFromAtoB(joined);
+            addMarkersToMap(joined);
+            calculateRouteFromAtoB(joined);
+            addMarkersToMap(joined);
+        }
+
+        $(".filled-in").change(function(){
+            if (this.checked) {
+                console.log(this.id);
+                var shipment_id = this.id;
+                addWaypoint(shipment_id.replace("filled-in-box", ""));
+            }
+            else{
+                draw_new_waypoints(null)
+            }
+        })
+    });
+</script>
+</body>
+</html>

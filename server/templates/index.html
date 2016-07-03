@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Smart Transportation and Energy</title>
+
+    <!-- CSS  -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="css/materialize.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+</head>
+<body>
+    <header>
+        <nav class="primary-color" role="navigation">
+            <div class="nav-wrapper container">
+                <a href="#" class="brand-logo">Kühne & Nagel Challenge</a>
+                <a href="#" class="brand-logo right">
+                    <img id="navbar-Logo" src="images/K&N_logo_small.jpg">
+                </a>
+                <ul class="right hide-on-med-and-down">
+                </ul>
+                <ul id="nav-mobile" class="side-nav">
+                    <li><a href={{url_for("newRoute")}}>New Route</a></li>
+                </ul>
+                <a href="#" data-activates="nav-mobile" class="button-collapse">
+                    <i class="material-icons accent-color-text">menu</i>
+                </a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <div class="container">
+            <div class="section">
+                <div class="row valign-wrapper">
+                    <div class="col s4 m4 l7">
+                        <form>
+                            <div class="input-field">
+                                <label for="search"><i class="material-icons prefix">search</i></label>
+                                <input id="search" style="font-size: 22px;" type="search" required>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col s2 m2 l5">
+                        <button data-target="importModal" class="btn primary-color modal-trigger right"><i class="material-icons right">&#xE2C6;</i>Import File</button>
+                    </div>
+                </div>
+
+                <table id="orderTable" class="highlight">
+                    <thead>
+                        <tr>
+                            <th data-field="id">Order-ID #</th>
+                            <th data-field="start-company">Pick Up Company</th>
+                            <th data-field="start">Pick Up Address</th>
+                            <th data-field="destination-company">Drop Off Company</th>
+                            <th data-field="destination">Drop Off Address</th>
+                        </tr>
+                    </thead>
+                    <tbody id="orderTableContent">
+                        {% for s in shipments %}
+                            <tr>
+                                <td><a href={{url_for("overview", id=s.id)}}>{{ s.id }}</a></td>
+                                <td><a href={{url_for("overview", id=s.id)}}>{{ s.pickup_name }}</a></td>
+                                <td><a class="truncate" href={{url_for("overview", id=s.id)}}>{{ s.get_start_location()}}</a></td>
+                                <td><a class="truncate" href={{url_for("overview", id=s.id)}}>{{ s.drop_off_name }}</a></td>
+                                <td><a class="truncate" href={{url_for("overview", id=s.id)}}>{{ s.get_end_location()}}</a></td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <footer class="page-footer primary-color">
+        <div class="container">
+            <div class="row">
+                <div class="col s12 m12 l6">
+                    <h5 class="white-text">About the Kühne and Nagel Challenge</h5>
+                    <p class="grey-text text-lighten-4">This project is being developed for the Smart Transportation & Energy Hackathon at the Rainmaking Loft in Berlin.</p>
+                </div>
+                <div class="col s12 m12 l3">
+                    <h5 class="white-text">Links</h5>
+                    <ul>
+                        <li><a class="white-text" href="https://github.com/WGierke/smart_transportation_and_energy">Git</a></li>
+                        <li><a class="white-text" href="http://de.kuehne-nagel.com/de_de/">K&N Homepage</a></li>
+                    </ul>
+                </div>
+                <div class="col s12 m12 l3">
+                    <h5 class="white-text">Contact</h5>
+                    <ul>
+                        <li><a class="white-text" href="mailto:robert.stark@student.hpi.de">E-Mail</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="footer-copyright">
+            <div class="container">
+                Developed by
+                <a class="primary-color-light-text" href="mailto:ajay.kesar@student.hpi.de">Ajay</a>,
+                <a class="primary-color-light-text" href="mailto:aron.kunze@student.hpi.de">Aron</a>,
+                <a class="primary-color-light-text" href="mailto:robert.stark@student.hpi.de">Robert</a> and
+                <a class="primary-color-light-text" href="mailto:willi.gierke@student.hpi.de">Willi</a>.
+            </div>
+        </div>
+    </footer>
+
+<div id="importModal" class="modal">
+    <div class="modal-content">
+        <h4>Import new file</h4>
+        <form action="#">
+            <div class="file-field input-field">
+                <div class="btn primary-color">
+                    <span>Select File</span>
+                    <input type="file">
+                </div>
+                    <div class="file-path-wrapper">
+                    <input class="file-path validate" type="text">
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Upload</a>
+    </div>
+</div>
+
+    <!-- Scripts -->
+    <script src="js/jquery-2.1.1.min.js"></script>
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+    <script src="js/materialize.js"></script>
+    <script src="js/init.js"></script>
+    <script>
+        var table_source = [];
+        var $rows = $('#orderTableContent tr');
+        $('#search').keyup(function() {
+            var val = '^(?=.*\\b' + $.trim($(this).val()).split(/\s+/).join('\\b)(?=.*\\b') + ').*$',
+                    reg = RegExp(val, 'i'),
+                    text;
+
+            $rows.show().filter(function () {
+                text = $(this).text().replace(/\s+/g, ' ');
+                return !reg.test(text);
+            }).hide();
+        });
+
+        function GetTableValues() {
+            var table = document.getElementById("orderTableContent");
+            for (var r = 0, n = table.rows.length; r < n; r++) {
+                for (var c = 0, m = table.rows[r].cells.length; c < m; c++) {
+                    var element1 = (table.rows[r].cells[c].innerHTML);
+                    if ($.inArray(element1, table_source) == -1) {
+                        table_source.push(table.rows[r].cells[c].innerHTML);
+                    }
+                }
+            }
+        }
+
+{#        $(function(){#}
+{#            GetTableValues();#}
+{#            $("#search").autocomplete({#}
+{#                minLength: 2,#}
+{#                source: table_source#}
+{#            });#}
+{#        });#}
+
+        var $table = $('table'),
+        $bodyCells = $table.find('tbody tr:first').children(),
+        colWidth;
+
+        // Get the tbody columns width array
+        colWidth = $bodyCells.map(function() {
+            return $(this).width();
+        }).get();
+
+        // Set the width of thead columns
+        $table.find('thead tr').children().each(function(i, v) {
+            $(v).width(colWidth[i]);
+        });
+        $(window).resize(function() {
+
+        }).resize(); // Trigger the resize handler once the script runs
+
+    </script>
+</body>
+</html>

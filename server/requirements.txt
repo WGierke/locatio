@@ -1,0 +1,13 @@
+Flask==0.11.1
+Flask-Admin==1.4.2
+Flask-SQLAlchemy==2.1
+Jinja2==2.8
+MarkupSafe==0.23
+SQLAlchemy==1.0.13
+WTForms==2.1
+Werkzeug==0.11.10
+click==6.6
+itsdangerous==0.24
+osmapi==0.6.2
+requests==2.10.0
+wsgiref==0.1.2

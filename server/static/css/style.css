@@ -1,0 +1,254 @@
+nav ul a,
+nav .brand-logo {
+    color: #FFFFFF;
+}
+
+body {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+}
+
+main {
+    flex: 1 0 auto;
+}
+
+p {
+    line-height: 2rem;
+}
+
+.button-collapse {
+    color: #26a69a;
+}
+
+.parallax-container {
+    min-height: 380px;
+    line-height: 0;
+    height: auto;
+    color: rgba(255, 255, 255, .9);
+}
+
+.parallax-container .section {
+    width: 100%;
+}
+
+.btn-large {
+    margin-bottom: 5px;
+}
+
+.collection .collection-item.avatar {
+    min-height: 0px;
+}
+
+.secondary-content .material-icons {
+    font-size: 34px;
+}
+
+.collection {
+    margin: 0px;
+}
+
+.collection-item .title {
+    float: top;
+}
+
+.collection-item .status {
+    opacity: 0.5;
+    margin-right: 10px;
+}
+
+.collection-item .ticket {
+    opacity: 0.3;
+}
+
+.card {
+    margin: 1rem 0 1rem 0;
+}
+
+.card .card-image-div {
+    background-color: #EEE;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.card .card-content .card-title {
+    line-height: 1.5;
+}
+
+.card .card-action a {
+    color: #663fb4;
+}
+
+.card .card-action a:hover {
+    color: #5133a6;
+}
+
+@media only screen and (max-width: 992px) {
+    .parallax-container .section {
+        position: absolute;
+        top: 40%;
+    }
+
+    #index-banner .section {
+        top: 10%;
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    #index-banner .section {
+        top: 0;
+    }
+}
+
+.background-image-container {
+    position: fixed;
+    overflow: hidden;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: -1;
+}
+
+.background-image-container img {
+    position: absolute;
+    bottom: 0;
+    min-width: 100%;
+    min-height: 100%;
+    opacity: 0.7;
+}
+
+.parallax img {
+    opacity: 0.7;
+}
+
+.icon-block {
+    padding: 0 15px;
+}
+
+.icon-block .material-icons {
+    font-size: inherit;
+}
+
+footer.page-footer {
+    margin: 0;
+}
+
+#navbar-Logo {
+    height: 60px;
+}
+
+/**
+* Corporate design colors
+**/
+.primary-color {
+    background-color: #1e3054 !important;
+}
+
+.primary-color-dark {
+    background-color: #455A64 !important;
+}
+
+.primary-color-light {
+    background-color: #CFD8DC !important;
+}
+
+.accent-color {
+    background-color: #009688 !important;
+}
+
+.primary-color-text {
+    color: #607D8B !important;
+}
+
+.primary-color-dark-text {
+    color: #455A64 !important;
+}
+
+.primary-color-light-text {
+    color: #CFD8DC !important;
+}
+
+.accent-color-text {
+    color: #009688 !important;
+}
+
+.route-info-values {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.img-icons {
+    width: 50px;
+    height: 50px;
+}
+
+.img-icons-street {
+    width: 40px;
+    height: 50px;
+}
+
+.img-icons-bridge {
+    width: 60px;
+    height: 50px;
+}
+
+.img-icons-bridgeEntry {
+    width: 70px;
+    height: 50px;
+}
+
+.img-icons-streetCurve {
+    width: 115px;
+    height: 50px;
+}
+
+.img-icons-ramp {
+    width: 60px;
+    height: 50px;
+}
+
+.img-icons-contact {
+    font-size: 50px;
+    color: #1e3054;
+}
+
+td a {
+    display: block;
+}
+
+td a:link {
+    color: black;
+}
+
+td a:visited {
+    color: black;
+}
+
+td a:hover {
+    color: black;
+}
+
+td a:active {
+    color: black;
+}
+
+tbody tr.hover {
+    cursor: pointer;
+}
+
+#orderTable {
+    display: block;
+    width: 100%;
+    height: 400px;
+    overflow-y: auto;
+    overflow-x: hidden; 
+}
+
+.bigger-font {
+    font-weight: bold;
+    font-size: 16px;
+}
